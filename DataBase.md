@@ -2,7 +2,7 @@
 
 ## 🧩 1. Contexte du Projet
 
-Ce projet met en œuvre un système de supervision environnementale basé sur des capteurs Arduino connectés à une application Windows Forms développée en C#. Les mesures collectées (CO2, humidité, température, luminosité) sont transmises par trames réseau (TCP/IP) à l’application, puis stockées dans une base de données **MySQL hébergée sur Azure**.
+Ce projet met en œuvre un système de supervision environnementale basé sur des capteurs Arduino connectés à une application Windows Forms développée en C#. Les mesures collectées (CO2, humidité, température, luminosité, temps) sont transmises par trames réseau (TCP/IP) à l’application, puis stockées dans une base de données **MySQL hébergée sur Azure**.
 
 Le projet suit une approche **DevOps** intégrant CI/CD, automatisation du déploiement, journalisation, et respecte les principes de **conformité RGPD**.
 
@@ -33,10 +33,13 @@ Le projet suit une approche **DevOps** intégrant CI/CD, automatisation du dépl
 
 ### 🔹 Table `mesures`
 
+Chaque trame envoyée contient les types suivants : `temps`, `humidité`, `température`, `luminosité`, `CO2`.  
+Chaque mesure est stockée indépendamment avec son type pour assurer la flexibilité et la compatibilité avec des futures extensions.
+
 | Colonne       | Type         | Contraintes                    | Description                                   |
 |---------------|--------------|--------------------------------|-----------------------------------------------|
 | id_mesure     | INT          | PRIMARY KEY, AUTO_INCREMENT    | Identifiant unique de la mesure              |
-| type_mesure   | VARCHAR(50)  | NOT NULL                       | Type de la mesure (TEMP, HUMIDITE, etc.)     |
+| type_mesure   | VARCHAR(50)  | NOT NULL                       | `"temps"`, `"humidité"`, `"température"`, `"luminosité"`, `"CO2"` |
 | valeur        | FLOAT        | NOT NULL                       | Valeur mesurée                               |
 | horodatage    | DATETIME     | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date et heure de la mesure             |
 | id_capteur    | INT          | FOREIGN KEY → capteurs(id_capteur) | Lien vers le capteur                        |
@@ -104,3 +107,39 @@ Le projet suit une approche **DevOps** intégrant CI/CD, automatisation du dépl
 
 Cette base de données s’inscrit dans une architecture complète et conforme aux exigences DevOps et RGPD. Elle constitue un socle robuste pour la supervision en temps réel, avec une intégration cloud, une gestion sécurisée et des possibilités d’extension futures (analyse, alertes, dashboard...).
 
+---
+
+## 🧾 9. Script SQL `init_db.sql`
+
+```sql
+-- Création de la base
+CREATE DATABASE IF NOT EXISTS monitoring CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE monitoring;
+
+-- Table capteurs
+CREATE TABLE IF NOT EXISTS capteurs (
+    id_capteur INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    emplacement VARCHAR(100),
+    description TEXT
+);
+
+-- Table mesures
+CREATE TABLE IF NOT EXISTS mesures (
+    id_mesure INT AUTO_INCREMENT PRIMARY KEY,
+    type_mesure VARCHAR(50) NOT NULL,
+    valeur FLOAT NOT NULL,
+    horodatage DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_capteur INT,
+    FOREIGN KEY (id_capteur) REFERENCES capteurs(id_capteur)
+);
+
+-- Table logs_trames (optionnelle)
+CREATE TABLE IF NOT EXISTS logs_trames (
+    id_log INT AUTO_INCREMENT PRIMARY KEY,
+    date_evenement DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    evenement VARCHAR(100) NOT NULL,
+    contenu_trame TEXT,
+    commentaire TEXT
+);
+```
