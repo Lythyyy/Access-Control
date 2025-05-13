@@ -6,6 +6,8 @@ Ce projet met en œuvre un système de supervision environnementale basé sur de
 
 Le projet suit une approche **DevOps** intégrant CI/CD, automatisation du déploiement, journalisation, et respecte les principes de **conformité RGPD**.
 
+Lien vers le *Trello* : https://trello.com/b/t0ol6uTz/4devops-base-de-donnees
+
 ---
 
 ## 🗂️ Objectifs de la base de données
