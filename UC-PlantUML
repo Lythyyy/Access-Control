@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor Enseignant
+actor "Technicien de labo" as Technicien
+actor Administrateur
+actor "Élève/Personnel" as Eleve
+
+rectangle "UC Système MonitorControl\n(Salle Physique-Chimie)" {
+    (Réserver un créneau) as Reserver
+    (Valider une réservation) as Valider
+    (Afficher le planning) as Afficher
+    (Administration du système) as GCre
+	Note right of (GCre)
+		Gestion des utilisateurs, des accès, des réservations et de l'écran
+        end note 
+}
+
+Enseignant -- Reserver
+Technicien -- Valider
+Valider ..> Afficher : "include"
+Reserver ..> Afficher : "include"
+
+Administrateur -- GCre
+Afficher -[hidden]- Eleve
+Eleve -- Afficher
+@enduml
