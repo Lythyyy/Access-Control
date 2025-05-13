@@ -112,34 +112,30 @@ Cette base de données s’inscrit dans une architecture complète et conforme a
 ## 🧾 9. Script SQL `init_db.sql`
 
 ```sql
--- Création de la base
-CREATE DATABASE IF NOT EXISTS monitoring CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE monitoring;
-
--- Table capteurs
-CREATE TABLE IF NOT EXISTS capteurs (
-    id_capteur INT AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(50) NOT NULL,
-    emplacement VARCHAR(100),
-    description TEXT
+-- Création de la table capteurs
+CREATE TABLE capteurs (
+    id_capteur INT IDENTITY(1,1) PRIMARY KEY,
+    type NVARCHAR(50) NOT NULL,
+    emplacement NVARCHAR(100) NULL,
+    description NVARCHAR(MAX) NULL
 );
 
--- Table mesures
-CREATE TABLE IF NOT EXISTS mesures (
-    id_mesure INT AUTO_INCREMENT PRIMARY KEY,
-    type_mesure VARCHAR(50) NOT NULL,
+-- Création de la table mesures
+CREATE TABLE mesures (
+    id_mesure INT IDENTITY(1,1) PRIMARY KEY,
+    type_mesure NVARCHAR(50) NOT NULL,
     valeur FLOAT NOT NULL,
-    horodatage DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_capteur INT,
-    FOREIGN KEY (id_capteur) REFERENCES capteurs(id_capteur)
+    horodatage DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    id_capteur INT FOREIGN KEY REFERENCES capteurs(id_capteur)
 );
 
--- Table logs_trames (optionnelle)
-CREATE TABLE IF NOT EXISTS logs_trames (
-    id_log INT AUTO_INCREMENT PRIMARY KEY,
-    date_evenement DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    evenement VARCHAR(100) NOT NULL,
-    contenu_trame TEXT,
-    commentaire TEXT
+-- Création de la table logs_trames (optionnelle)
+CREATE TABLE logs_trames (
+    id_log INT IDENTITY(1,1) PRIMARY KEY,
+    date_evenement DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    evenement NVARCHAR(100) NOT NULL,
+    contenu_trame NVARCHAR(MAX) NULL,
+    commentaire NVARCHAR(MAX) NULL
 );
+
 ```
