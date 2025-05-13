@@ -1,6 +1,6 @@
 # 📘 Documentation Technique - Base de Données (Projet DevOps Arduino → C# → MySQL sur Azure)
 
-## 🧩 1. Contexte du Projet
+## 🧩 Contexte du Projet
 
 Ce projet met en œuvre un système de supervision environnementale basé sur des capteurs Arduino connectés à une application Windows Forms développée en C#. Les mesures collectées (CO2, humidité, température, luminosité, temps) sont transmises par trames réseau (TCP/IP) à l’application, puis stockées dans une base de données **MySQL hébergée sur Azure**.
 
@@ -8,7 +8,7 @@ Le projet suit une approche **DevOps** intégrant CI/CD, automatisation du dépl
 
 ---
 
-## 🗂️ 2. Objectifs de la base de données
+## 🗂️ Objectifs de la base de données
 
 - Centraliser les données issues des capteurs.
 - Garantir la persistance, la traçabilité et la validité des mesures.
@@ -18,7 +18,7 @@ Le projet suit une approche **DevOps** intégrant CI/CD, automatisation du dépl
 
 ---
 
-## 🛠️ 3. Structure de la Base de Données
+## 🛠️ Structure de la Base de Données
 
 ### 🔹 Table `capteurs`
 
@@ -58,7 +58,7 @@ Chaque mesure est stockée indépendamment avec son type pour assurer la flexibi
 
 ---
 
-## 🧱 4. Déploiement et Intégration Azure
+## 🧱 Déploiement et Intégration Azure
 
 - Instance **Azure Database for MySQL**, hébergée en **France Central** (RGPD).
 - Connexions sécurisées **SSL/TLS**.
@@ -68,7 +68,7 @@ Chaque mesure est stockée indépendamment avec son type pour assurer la flexibi
 
 ---
 
-## 🔐 5. Sécurité & RGPD
+## 🔐 Sécurité & RGPD
 
 - Aucun traitement de données personnelles (mesures techniques uniquement).
 - Conformité RGPD assurée par :
@@ -79,7 +79,7 @@ Chaque mesure est stockée indépendamment avec son type pour assurer la flexibi
 
 ---
 
-## 🔄 6. Intégration DevOps
+## 🔄 Intégration DevOps
 
 - Script SQL versionné (`init_db.sql`).
 - Pipeline CI/CD avec :
@@ -90,7 +90,7 @@ Chaque mesure est stockée indépendamment avec son type pour assurer la flexibi
 
 ---
 
-## 📈 7. Cas d’usage et flux de données
+## 📈 Cas d’usage et flux de données
 
 1. L’opérateur démarre la surveillance.
 2. L’Arduino envoie périodiquement des trames (via TCP/IP).
@@ -103,13 +103,9 @@ Chaque mesure est stockée indépendamment avec son type pour assurer la flexibi
 
 ---
 
-## ✅ 8. Conclusion
 
-Cette base de données s’inscrit dans une architecture complète et conforme aux exigences DevOps et RGPD. Elle constitue un socle robuste pour la supervision en temps réel, avec une intégration cloud, une gestion sécurisée et des possibilités d’extension futures (analyse, alertes, dashboard...).
 
----
-
-## 🧾 9. Script SQL `init_db.sql`
+## 🧾 Script SQL `init_db.sql`
 
 ```sql
 -- Création de la table capteurs
