@@ -1,0 +1,31 @@
+@startuml
+title IBD – Système MonitorControl (Salle Physique-Chimie)
+
+skinparam componentStyle rectangle
+left to right direction
+
+package "Système MonitorControl" {
+    
+    node "Serveur MonitorControl" {
+        component "Application Web" as App
+        component "Base de Données" as DB
+    }
+
+    node "Poste Technicien\n(navigateur web)" as TechPC
+
+    node "Poste Enseignant\n(navigateur web)" as TeachPC
+
+    node "Écran Salle Physique-Chimie" {
+        component "Centrale d'affichage" as DisplayUnit
+    }
+}
+
+' Connexions logiques
+TeachPC --> App : HTTP (réservation)
+TechPC --> App : HTTP (validation)
+
+App --> DB : SQL (enregistrement, lecture)
+App --> DisplayUnit : Mise à jour planning (API REST / MQTT)
+DisplayUnit --> App : ACK affichage
+
+@enduml
