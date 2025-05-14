@@ -1,0 +1,29 @@
+@startuml
+title REQ «MonitorControl» [Détail : Validation automatique des réservations]
+
+left to right direction
+skinparam rectangle {
+  BackgroundColor #FDF6E3
+  BorderColor Black
+  RoundCorner 10
+  FontSize 12
+}
+skinparam linetype ortho
+
+package "Validation automatique des réservations" {
+  
+  rectangle "«Requirement»\nSpécification de la validation automatique\nid = 1.F3\ntext = Le système doit valider automatiquement une réservation\nsi la salle est détectée comme utilisable." as R1
+
+  rectangle "«Requirement»\nVérification des capteurs\nid = 1.F3.1\ntext = Le système doit interroger les capteurs environnementaux\npour évaluer l’état de la salle." as R2
+
+  rectangle "«Requirement»\nValidation si conditions normales\nid = 1.F3.2\ntext = Le système doit valider la réservation si tous\nles capteurs sont dans des plages acceptables." as R3
+
+  rectangle "«Requirement»\nRefus et alerte en cas de danger\nid = 1.F3.3\ntext = Si une anomalie est détectée, le système doit refuser\nla réservation, afficher \"DANGER\" et notifier l’administrateur." as R4
+}
+
+' Liens d’agrégation (comme dans ton image)
+R2 -[#black,thickness=2]-o R1
+R3 -[#black,thickness=2]-o R1
+R4 -[#black,thickness=2]-o R1
+
+@enduml
