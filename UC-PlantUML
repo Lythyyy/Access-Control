@@ -1,27 +1,29 @@
 @startuml
+title Use Case – MonitorControl (Salle Physique-Chimie avec validation automatique)
+
 left to right direction
 skinparam packageStyle rectangle
+
 actor Enseignant
-actor "Technicien de labo" as Technicien
 actor Administrateur
 actor "Élève/Personnel" as Eleve
 
 rectangle "UC Système MonitorControl\n(Salle Physique-Chimie)" {
     (Réserver un créneau) as Reserver
-    (Valider une réservation) as Valider
-    (Afficher le planning) as Afficher
-    (Administration du système) as GCre
-	Note right of (GCre)
-		Gestion des utilisateurs, des accès, des réservations et de l'écran
-        end note 
+    (Vérification automatique via capteurs) as AutoCheck
+    (Afficher le planning ou un message DANGER) as Afficher
+    (Notifier l’administrateur en cas de danger) as Notifier
+    (Administration du système) as AdminSystem
+    note right of AdminSystem
+        Gestion des utilisateurs, des accès, réservations, capteurs et écran
+    end note
 }
 
 Enseignant -- Reserver
-Technicien -- Valider
-Valider ..> Afficher : "include"
-Reserver ..> Afficher : "include"
-
-Administrateur -- GCre
-Afficher -[hidden]- Eleve
+Reserver ..> AutoCheck : « include »
+AutoCheck ..> Afficher : « include »
+AutoCheck ..> Notifier : « include si anomalie »
 Eleve -- Afficher
+Administrateur -- AdminSystem
 @enduml
+
