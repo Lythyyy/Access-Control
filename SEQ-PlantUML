@@ -1,0 +1,37 @@
+@startuml
+title Diagramme de séquence – Réservation d’un créneau validée
+
+actor Enseignant
+actor "Technicien de labo" as Technicien
+participant "Interface Web" as UI
+participant "Contrôleur réservation" as Ctrl
+participant "Base de données" as DB
+participant "Écran affichage" as Ecran
+
+== Réservation du créneau ==
+
+Enseignant -> UI : Saisie demande de réservation
+UI -> Ctrl : Transmettre les infos (créneau, classe)
+Ctrl -> DB : Enregistrer réservation (état = "en attente")
+DB --> Ctrl : Confirmation enregistrée
+Ctrl --> UI : Afficher confirmation à l’enseignant
+
+== Validation par le technicien ==
+
+Technicien -> UI : Ouvre interface des réservations
+UI -> Ctrl : Demande liste des réservations en attente
+Ctrl -> DB : Lire réservations avec état = "en attente"
+DB --> Ctrl : Liste des réservations
+Ctrl --> UI : Affiche la liste
+
+Technicien -> UI : Clique sur "Valider" pour une réservation
+UI -> Ctrl : Transmettre validation
+Ctrl -> DB : Mettre à jour état = "validée"
+DB --> Ctrl : Mise à jour confirmée
+
+== Mise à jour de l’affichage ==
+
+Ctrl -> Ecran : Mettre à jour le planning affiché
+Ecran --> Ctrl : Affichage mis à jour
+
+@enduml
