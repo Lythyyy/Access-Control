@@ -1,31 +1,52 @@
 @startuml
-title IBD – Système MonitorControl (Salle Physique-Chimie)
+title IBD – MonitorControl (Salle Physique-Chimie – version complète avec Administrateur)
 
-skinparam componentStyle rectangle
-left to right direction
+skinparam rectangle {
+  BackgroundColor #F5F5F5
+  BorderColor Black
+  RoundCorner 15
+}
+skinparam defaultTextAlignment center
 
-package "Système MonitorControl" {
-    
-    node "Serveur MonitorControl" {
-        component "Application Web" as App
-        component "Base de Données" as DB
-    }
+rectangle "Système MonitorControl [block]" {
+  
+  rectangle "Application Web [part]" as App {
+    [Interface Utilisateur]
+    [Module Réservations]
+    [Module Affichage]
+    [Module Configuration]
+  }
 
-    node "Poste Technicien\n(navigateur web)" as TechPC
+  rectangle "Service Capteurs [part]" as Capteurs {
+    [Lecture capteurs]
+    [Analyse environnement]
+  }
 
-    node "Poste Enseignant\n(navigateur web)" as TeachPC
-
-    node "Écran Salle Physique-Chimie" {
-        component "Centrale d'affichage" as DisplayUnit
-    }
+  rectangle "Base de Données [part]" as DB
+  rectangle "Service Notification [part]" as Notif
+  rectangle "Afficheur Salle [part]" as Ecran
+  rectangle "Capteurs Physiques [part]" as PhysSensors {
+    [Capteur CO2]
+    [Capteur Température]
+    [Capteur Gaz]
+  }
 }
 
-' Connexions logiques
-TeachPC --> App : HTTP (réservation)
-TechPC --> App : HTTP (validation)
+actor Enseignant
+actor Administrateur
 
-App --> DB : SQL (enregistrement, lecture)
-App --> DisplayUnit : Mise à jour planning (API REST / MQTT)
-DisplayUnit --> App : ACK affichage
+' Interactions externes
+Enseignant --> App : Saisie réservation
+Administrateur --> App : Consultation & modification (réservations, écrans...)
+
+' Flux internes
+App --> Capteurs : Requête statut salle
+Capteurs --> PhysSensors : Lecture environnement
+Capteurs --> App : Retour état salle
+
+App --> DB : Lire / Écrire réservation, config
+App --> Notif : Envoi alerte
+Notif --> Administrateur : Notification danger
+App --> Ecran : Envoi affichage (planning ou DANGER)
 
 @enduml
